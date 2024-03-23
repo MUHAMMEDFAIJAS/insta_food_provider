@@ -1,20 +1,19 @@
 import 'dart:io';
 import 'package:firstproject/controller/food_model_provider.dart';
 import 'package:firstproject/controller/search_provider.dart';
+import 'package:firstproject/model/newmodel/new_food_model.dart';
 import 'package:firstproject/view/product_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
-import '../../model/newmodel/new_food_model.dart';
 
 class Product1 extends StatelessWidget {
   const Product1({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodProvider>(context);
-    final searchprovider = Provider.of<SearchProvider>(context);
-    provider.getallproductsprovider();
+    final foodProvider = Provider.of<FoodProvider>(context);
+    final searchProvider = Provider.of<SearchProvider>(context);
+    foodProvider.getallproductsprovider();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[300],
@@ -34,7 +33,7 @@ class Product1 extends StatelessWidget {
               width: 340,
               child: TextFormField(
                 onChanged: (value) {
-                  searchprovider.searchFunction(value);
+                  searchProvider.searchFunction(value);
                 },
                 decoration: const InputDecoration(
                   iconColor: Colors.white,
@@ -49,83 +48,76 @@ class Product1 extends StatelessWidget {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<FoodProvider>(
-              builder: (context, foodProvider, child) {
-                final filteredList = foodProvider.foodmodel
-                    .where((foodModel) =>
-                        foodModel.catagory.toLowerCase() == 'biriyani')
-                    .toList();
-                return searchprovider.search.isNotEmpty
-                    ? searchprovider.searchedList.isEmpty
-                        ? const Center(
-                            child: Text('No product available'),
-                          )
-                        : gridview(searchprovider.searchedList)
-                    : gridview(filteredList);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      body: Consumer2<FoodProvider, SearchProvider>(
+        builder: (context, foodProvider, searchProvider, child) {
+          List<NewFoodModel> filteredList = foodProvider.foodmodel
+              .where(
+                  (foodModel) => foodModel.catagory.toLowerCase() == 'biriyani')
+              .toList();
+          // Apply search if search text is not empty
+          if (searchProvider.search.isNotEmpty) {
+            filteredList = filteredList
+                .where((foodModel) => foodModel.name
+                    .toLowerCase()
+                    .contains(searchProvider.search.toLowerCase()))
+                    
+                .toList();
+          }
+          return filteredList.isEmpty
+              ? const Center(
+                  child: Text('No products available'),
+                )
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 4,
+                  ),
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final data = filteredList[index];
 
-  Widget gridview(List<NewFoodModel> productList) {
-    return productList.isEmpty
-        ? const Center(
-            child: Text('No products available'),
-          )
-        : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-            ),
-            itemCount: productList.length,
-            itemBuilder: (context, index) {
-              final data = productList[index];
-
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetails(
-                        name: data.name,
-                        price: data.price,
-                        imagepath: data.imagepath,
-                        index: index,
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  elevation: 50,
-                  shadowColor: Colors.black,
-                  surfaceTintColor: Colors.orange,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                              name: data.name,
+                              price: data.price,
+                              imagepath: data.imagepath,
+                              index: index,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 50,
+                        shadowColor: Colors.black,
+                        surfaceTintColor: Colors.orange,
                         child: Column(
                           children: [
-                            Image(
-                              image: FileImage(File(data.imagepath)),
-                              height: 80,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Image(
+                                    image: FileImage(File(data.imagepath)),
+                                    height: 80,
+                                  ),
+                                  Text(data.name),
+                                  const Gap(10),
+                                  Text(data.price),
+                                ],
+                              ),
                             ),
-                            Text(data.name),
-                            const Gap(10),
-                            Text(data.price),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+                    );
+                  },
+                );
+        },
+      ),
+    );
   }
 }
