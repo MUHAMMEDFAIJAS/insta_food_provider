@@ -1,10 +1,8 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:firstproject/controller/buy_now_provider.dart';
 import 'package:firstproject/controller/cart_provider.dart';
-import 'package:firstproject/controller/food_model_provider.dart';
 import 'package:firstproject/model/buynow/buynowmodel.dart';
-
 import 'package:firstproject/view/buy_now.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +14,10 @@ class AddCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log('cart');
     final cartprovider = Provider.of<CartProvider>(context, listen: false);
-    final buyprovider = Provider.of<Buynowprovider>(context);
-    final totalcartprovider = Provider.of<FoodProvider>(context);
+
     cartprovider.getallcartsprovider();
-    totalcartprovider.getallproductsprovider();
 
     return Scaffold(
       appBar: AppBar(
@@ -39,25 +36,12 @@ class AddCart extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: Consumer<CartProvider>(
-              builder: (context, providers, child) {
-                // child: ValueListenableBuilder(
-                //   valueListenable: cartListNotifer,
-                //   builder:
-                //       (BuildContext ctx, List<CartModel>? cartList, Widget? child) {
-
-                // if (cartList == null || cartList.isEmpty) {
-                //   return const Center(
-                //     child: Text('Add items to your cart'),
-                //   );
-                // }
+            child: Consumer2<CartProvider, Buynowprovider>(
+              builder: (context, providers, buypro, child) {
                 return ListView.builder(
-                  itemCount: providers.cartmodelList.length
-                  // cartListNotifer.value.length
-                  ,
+                  itemCount: providers.cartmodelList.length,
                   itemBuilder: (context, index) {
                     final data = providers.cartmodelList[index];
-                    // cartListNotifer.value[index];
 
                     return Container(
                       padding: const EdgeInsets.all(5),
@@ -100,7 +84,7 @@ class AddCart extends StatelessWidget {
                                 const SizedBox(height: 25),
                                 ElevatedButton(
                                   onPressed: () {
-                                    buyprovider.addbuynowprovider(BuynowModel(
+                                    buypro.addbuynowprovider(BuynowModel(
                                       name: data.name,
                                       price: data.price,
                                       imagepath: data.imagepath,

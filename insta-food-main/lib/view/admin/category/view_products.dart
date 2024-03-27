@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:firstproject/controller/food_model_provider.dart';
@@ -6,14 +7,14 @@ import 'package:firstproject/view/admin/adminfunction/update_product.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-
 class Viewproducts extends StatelessWidget {
   const Viewproducts({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodProvider>(context);
-    final totalprovider = Provider.of<FoodProvider>(context);
+    log('view products');
+    final provider = Provider.of<FoodProvider>(context, listen: false);
+    // final totalprovider = Provider.of<FoodProvider>(context);
     provider.getallproductsprovider();
     return Scaffold(
       appBar: AppBar(
@@ -32,10 +33,6 @@ class Viewproducts extends StatelessWidget {
           Expanded(
             child: Consumer<FoodProvider>(
               builder: (context, providers, child) {
-                // child: ValueListenableBuilder(
-                //   valueListenable: newFoodModelListNotifier,
-                //   builder: (BuildContext ctx, List<NewFoodModel> productList,
-                //       Widget? child) {
                 return ListView.builder(
                   itemCount: providers.foodmodel.length,
                   itemBuilder: (context, index) {
@@ -142,14 +139,16 @@ class Viewproducts extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      '₹ ${totalprovider.totalprice1()}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
+                    Consumer<FoodProvider>(builder: (context, pro, _) {
+                      return Text(
+                        '₹ ${pro.totalprice1()}',
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ],

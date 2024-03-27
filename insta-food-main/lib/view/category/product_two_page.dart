@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firstproject/controller/food_model_provider.dart';
 import 'package:firstproject/controller/search_provider.dart';
@@ -11,8 +12,8 @@ class ProducTtwo extends StatelessWidget {
   const ProducTtwo({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<FoodProvider>(context);
-    final searchprovider2 = Provider.of<SearchProvider>(context);
+    log('burgr');
+    final provider = Provider.of<FoodProvider>(context, listen: false);
     provider.getallproductsprovider();
     return Scaffold(
       appBar: AppBar(
@@ -31,103 +32,93 @@ class ProducTtwo extends StatelessWidget {
                 color: Colors.white,
               ),
               width: 340,
-              child: TextFormField(
-                onChanged: (value) {
-                  searchprovider2.searchfunction2(value);
-                },
-                decoration: const InputDecoration(
-                  iconColor: Colors.white,
-                  hintText: 'search for burgers..',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
+              child: Consumer<SearchProvider>(builder: (context, searchpro, _) {
+                return TextFormField(
+                  onChanged: (value) {
+                    searchpro.searchfunction2(value);
+                  },
+                  decoration: const InputDecoration(
+                    iconColor: Colors.white,
+                    hintText: 'search for burgers..',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Consumer<FoodProvider>(
-              builder: (context, providers, child) {
-                // child: ValueListenableBuilder<List<NewFoodModel>>(
-                //   valueListenable: newFoodModelListNotifier,
-                //   builder: (BuildContext ctx, List<NewFoodModel> productList,
-                //       Widget? child) {
-                final filteredList = providers.foodmodel
-                    .where((foodModel) =>
-                        foodModel.catagory.toLowerCase() == 'burger')
-                    .toList();
-                return searchprovider2.search2.isNotEmpty
-                    ? searchprovider2.searchedList2.isEmpty
-                        ? const Center(
-                            child: Text('No product'),
-                          )
-                        : gridview(searchprovider2.searchedList2)
-                    : gridview(filteredList);
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+      body: Consumer2<FoodProvider, SearchProvider>(
+        builder: (context, foodpro, serchpro, child) {
+          List<NewFoodModel> filteredList = foodpro.foodmodel
+              .where(
+                  (foodModel) => foodModel.catagory.toLowerCase() == 'burger')
+              .toList();
 
-  Widget gridview(List<NewFoodModel> productList) {
-    return productList.isEmpty
-        ? const Center(
-            child: Text('No products available'),
-          )
-        : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 4,
-              mainAxisSpacing: 4,
-            ),
-            itemCount: productList.length,
-            itemBuilder: (context, index) {
-              final data = productList[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductDetails(
-                        name: data.name,
-                        price: data.price,
-                        imagepath: data.imagepath,
-                        index: index,
-                      ),
-                    ),
-                  );
-                },
-                child: Card(
-                  elevation: 50,
-                  shadowColor: Colors.black,
-                  surfaceTintColor: Colors.orange,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
+          if (serchpro.search2.isNotEmpty) {
+            filteredList = filteredList
+                .where((foodmodel) => foodmodel.name
+                    .toLowerCase()
+                    .contains(serchpro.search2.toLowerCase()))
+                .toList();
+          }
+
+          return filteredList.isEmpty
+              ? const Center(
+                  child: Text('no products available'),
+                )
+              : GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 4,
+                    mainAxisSpacing: 4,
+                  ),
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final data = filteredList[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetails(
+                              name: data.name,
+                              price: data.price,
+                              imagepath: data.imagepath,
+                              index: index,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Card(
+                        elevation: 50,
+                        shadowColor: Colors.black,
+                        surfaceTintColor: Colors.orange,
                         child: Column(
                           children: [
-                            Image(
-                              image: FileImage(File(data.imagepath)),
-                              height: 80,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  Image(
+                                    image: FileImage(File(data.imagepath)),
+                                    height: 80,
+                                  ),
+                                  Text(data.name),
+                                  const Gap(10),
+                                  Text(data.price),
+                                ],
+                              ),
                             ),
-                            Text(data.name),
-                            const Gap(10),
-                            Text(data.price),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          );
+                    );
+                  });
+        },
+      ),
+    );
   }
 }

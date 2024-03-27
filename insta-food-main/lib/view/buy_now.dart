@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
 import 'dart:io';
 import 'package:firstproject/controller/buy_now_provider.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,8 @@ class BuyNowPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buyprovider = Provider.of<Buynowprovider>(context);
+    log('my orders');
+    final buyprovider = Provider.of<Buynowprovider>(context, listen: false);
     buyprovider.getallbuyprovider();
     return Scaffold(
       appBar: AppBar(
@@ -26,10 +28,6 @@ class BuyNowPage extends StatelessWidget {
           Expanded(
             child: Consumer<Buynowprovider>(
               builder: (context, providers, child) {
-                // child: ValueListenableBuilder(
-                //   valueListenable: buyListNotifer,
-                //   builder: (BuildContext ctx, List<BuynowModel> buynowList,
-                //       Widget? child) {
                 return ListView.builder(
                   itemCount: providers.buymodelList.length,
                   itemBuilder: (context, index) {
@@ -79,7 +77,8 @@ class BuyNowPage extends StatelessWidget {
                                   const Gap(10),
                                   ElevatedButton(
                                     onPressed: () {
-                                      buyprovider.deleteallbuy(index);
+                                      providers.deleteallbuy(index);
+                                      providers.getallbuyprovider();
                                     },
                                     child: const Text('cancel order'),
                                   )

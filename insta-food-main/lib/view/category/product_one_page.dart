@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:firstproject/controller/food_model_provider.dart';
 import 'package:firstproject/controller/search_provider.dart';
@@ -11,8 +12,8 @@ class Product1 extends StatelessWidget {
   const Product1({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final foodProvider = Provider.of<FoodProvider>(context);
-    final searchProvider = Provider.of<SearchProvider>(context);
+    log('biriyani');
+    final foodProvider = Provider.of<FoodProvider>(context, listen: false);
     foodProvider.getallproductsprovider();
     return Scaffold(
       appBar: AppBar(
@@ -31,19 +32,21 @@ class Product1 extends StatelessWidget {
                 color: Colors.white,
               ),
               width: 340,
-              child: TextFormField(
-                onChanged: (value) {
-                  searchProvider.searchFunction(value);
-                },
-                decoration: const InputDecoration(
-                  iconColor: Colors.white,
-                  hintText: 'search for biriyani',
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
+              child: Consumer<SearchProvider>(builder: (context, searchpro, _) {
+                return TextFormField(
+                  onChanged: (value) {
+                    searchpro.searchFunction(value);
+                  },
+                  decoration: const InputDecoration(
+                    iconColor: Colors.white,
+                    hintText: 'search for biriyani',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ),
           ),
         ),
@@ -54,13 +57,12 @@ class Product1 extends StatelessWidget {
               .where(
                   (foodModel) => foodModel.catagory.toLowerCase() == 'biriyani')
               .toList();
-          // Apply search if search text is not empty
+
           if (searchProvider.search.isNotEmpty) {
             filteredList = filteredList
                 .where((foodModel) => foodModel.name
                     .toLowerCase()
                     .contains(searchProvider.search.toLowerCase()))
-                    
                 .toList();
           }
           return filteredList.isEmpty

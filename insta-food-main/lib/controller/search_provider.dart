@@ -38,6 +38,7 @@ class SearchProvider extends ChangeNotifier {
 
   searchfunction2(value) {
     search2 = value;
+    searchListUpdate2();
   }
 
   void searchListUpdate3() {
@@ -51,5 +52,6 @@ class SearchProvider extends ChangeNotifier {
 
   searchfunction3(value) {
     search3 = value;
+    searchListUpdate3();
   }
 }

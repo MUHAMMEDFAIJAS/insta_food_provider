@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firstproject/controller/add_screen_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,8 @@ class Addscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<AddproductProvider>(context);
+    log('add products');
+    final provider = Provider.of<AddproductProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[300],
@@ -20,12 +23,24 @@ class Addscreen extends StatelessWidget {
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
-                  provider.image == null
-                      ? ElevatedButton(
-                          onPressed: provider.getImageFromGallery,
-                          child: const Text('Add Image'),
-                        )
-                      : Image.file(provider.image!),
+                  Consumer<AddproductProvider>(builder: (context, pro, _) {
+                    return Container(
+                      height: 200,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: pro.image == null
+                          ? TextButton(
+                              onPressed: pro.getImageFromGallery,
+                              child: const Text('Add Image'),
+                            )
+                          : Image.file(
+                              pro.image!,
+                            ),
+                    );
+                  }),
                   const SizedBox(height: 10),
                   TextFormField(
                     controller: provider.nameController,
@@ -42,28 +57,33 @@ class Addscreen extends StatelessWidget {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  DropdownButton(
-                    value: provider.dropdownvalue,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: provider.items.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      provider.dropdownvalue = newValue!;
-                    },
-                    style: const TextStyle(color: Colors.black),
-                    underline: Container(
-                      decoration: BoxDecoration(
+                  Consumer<AddproductProvider>(builder: (context, prov, child) {
+                    return DropdownButton(
+                      value: prov.dropdownvalue,
+                      icon: const Icon(Icons.keyboard_arrow_down),
+                      items: prov.items.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        prov.dropdownvalue = newValue!;
+                        prov.dropdownfunc();
+                      },
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.blue,
                           border: const Border(
-                              bottom: BorderSide(style: BorderStyle.solid))),
-                      height: 1,
-                    ),
-                  ),
+                            bottom: BorderSide(style: BorderStyle.solid),
+                          ),
+                        ),
+                        height: 1,
+                      ),
+                    );
+                  }),
                   const SizedBox(height: 10),
                   ElevatedButton.icon(
                     onPressed: () {

@@ -14,7 +14,6 @@ class AddproductProvider extends ChangeNotifier {
     'burger',
     'juice',
   ];
-  
 
   final nameController = TextEditingController();
   final priceController = TextEditingController();
@@ -53,5 +52,9 @@ class AddproductProvider extends ChangeNotifier {
     nameController.clear();
     priceController.clear();
     image = null;
+  }
+
+  dropdownfunc() {
+    notifyListeners();
   }
 }
