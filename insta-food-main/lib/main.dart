@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:firstproject/controller/add_screen_provider.dart';
+import 'package:firstproject/controller/bottom_provider.dart';
 import 'package:firstproject/controller/edit_screen_provider.dart';
 import 'package:firstproject/controller/food_model_provider.dart';
 import 'package:firstproject/controller/admin_delete_provider.dart';
@@ -67,7 +68,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => Editprovider(),
         ),
-       
+        ChangeNotifierProvider(
+          create: (context) => Bottombar(),
+        )
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

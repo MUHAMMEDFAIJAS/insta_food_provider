@@ -1,32 +1,21 @@
-import 'package:firstproject/view/cart_screen.dart';
-import 'package:firstproject/view/home_screen.dart';
-import 'package:firstproject/view/settings_screen.dart';
+import 'package:firstproject/controller/bottom_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class BottomNav extends StatefulWidget {
+class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
 
   @override
-  State<BottomNav> createState() => _BottomNavState();
-}
-
-class _BottomNavState extends State<BottomNav> {
-  int currentindex = 0;
-
-  List screens = [const HomeScreen(), const AddCart(), const MySettings()];
-
-  @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<Bottombar>(context);
     return Scaffold(
-      body: screens[currentindex],
+      body: provider.screens[provider.currentindex],
       bottomNavigationBar: BottomNavigationBar(
         showUnselectedLabels: true,
         elevation: 0,
-        currentIndex: currentindex,
+        currentIndex: provider.currentindex,
         onTap: (newindex) {
-          setState(() {
-            currentindex = newindex;
-          });
+          provider.bootomfun(newindex);
         },
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.black,
