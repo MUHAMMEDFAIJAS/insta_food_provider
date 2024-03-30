@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:fine_bar_chart/fine_bar_chart.dart';
 import 'package:firstproject/controller/buy_now_provider.dart';
