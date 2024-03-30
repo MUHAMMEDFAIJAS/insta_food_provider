@@ -2,15 +2,13 @@ import 'package:firstproject/controller/admin_delete_provider.dart';
 import 'package:firstproject/view/admin/adminfunction/add_screen.dart';
 import 'package:firstproject/view/admin/category/view_products.dart';
 import 'package:firstproject/view/admin/chart_page.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class Adminpage extends StatelessWidget {
   const Adminpage({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {  
     final provider = Provider.of<Adminprovider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -38,8 +36,11 @@ class Adminpage extends StatelessWidget {
             icon: Icons.list,
             title: 'chart',
             onTap: () {
+              
               Navigator.of(context).push(
+                
                 MaterialPageRoute(
+                  
                   builder: (context) => const BarChart(),
                 ),
               );

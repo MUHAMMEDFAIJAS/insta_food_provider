@@ -66,12 +66,15 @@ class EditScreenState extends State<EditScreen> {
                   child: SizedBox(
                     width: 200,
                     height: 200,
-                    child: CircleAvatar(
-                      backgroundImage: provider.selectImage != null
-                          ? FileImage(provider.selectImage!)
-                          : const AssetImage("assets/images/default_image.jpg")
-                              as ImageProvider,
-                    ),
+                    child: Consumer<Editprovider>(builder: (context, prov, _) {
+                      return CircleAvatar(
+                        backgroundImage: prov.selectImage != null
+                            ? FileImage(prov.selectImage!)
+                            : const AssetImage(
+                                    "assets/images/default_image.jpg")
+                                as ImageProvider,
+                      );
+                    }),
                   ),
                 ),
                 const SizedBox(height: 20),

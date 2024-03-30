@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:firstproject/controller/add_screen_provider.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ class Addscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('add products');
+   
     final provider = Provider.of<AddproductProvider>(context, listen: false);
     return Scaffold(
       appBar: AppBar(

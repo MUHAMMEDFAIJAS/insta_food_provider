@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:hive_flutter/adapters.dart';
 
@@ -16,7 +16,6 @@ class DbFunction {
   }
 
   Future<void> editNewFood(int index, NewFoodModel value) async {
-    log('message');
     final foodDB = await Hive.openBox<NewFoodModel>('newadded_db');
 
     foodDB.putAt(index, value);
@@ -25,7 +24,6 @@ class DbFunction {
   }
 
   Future<void> deleteNew(index) async {
-    log('deletefunction');
     final newaddedDb = await Hive.openBox<NewFoodModel>('newadded_db');
     newaddedDb.deleteAt(index);
     getAllNewFood();

@@ -32,7 +32,7 @@ class Product1 extends StatelessWidget {
                 color: Colors.white,
               ),
               width: 340,
-              child: Consumer<SearchProvider>(builder: (context, searchpro, _) {
+              child: Consumer2<SearchProvider,FoodProvider>(builder: (context, searchpro,foodpro, _) {
                 return TextFormField(
                   onChanged: (value) {
                     searchpro.searchFunction(value);

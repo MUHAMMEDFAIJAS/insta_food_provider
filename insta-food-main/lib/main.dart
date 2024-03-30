@@ -70,7 +70,8 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => Bottombar(),
-        )
+        ),
+     
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

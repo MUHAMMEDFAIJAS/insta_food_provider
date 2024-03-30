@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:firstproject/controller/buy_now_provider.dart';
+import 'package:firstproject/view/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,21 @@ class BuyNowPage extends StatelessWidget {
           'MY ORDERS',
           style: TextStyle(color: Colors.black, fontSize: 30),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const BottomNav()),
+                (Route<dynamic> route) => false,
+              );
+            },
+            icon: const Icon(
+              Icons.home,
+              color: Colors.black,
+              size: 30,
+            ),
+          )
+        ],
       ),
       body: Column(
         children: [

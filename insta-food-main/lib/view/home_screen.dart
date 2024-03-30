@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firstproject/view/category/product_one_page.dart';
@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
+ 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange[300],

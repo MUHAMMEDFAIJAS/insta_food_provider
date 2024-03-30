@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:firstproject/controller/buy_now_provider.dart';
 import 'package:firstproject/controller/cart_provider.dart';
@@ -14,7 +13,6 @@ class AddCart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('cart');
     final cartprovider = Provider.of<CartProvider>(context, listen: false);
 
     cartprovider.getallcartsprovider();

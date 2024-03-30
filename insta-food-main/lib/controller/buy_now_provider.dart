@@ -6,6 +6,7 @@ class Buynowprovider extends ChangeNotifier {
   List<BuynowModel> buymodelList = [];
   BuyFunction buyfun = BuyFunction();
 
+
   Future<void> addbuynowprovider(value) async {
     await buyfun.buyNow(value);
     getallbuyprovider();

@@ -14,7 +14,7 @@ class Viewproducts extends StatelessWidget {
   Widget build(BuildContext context) {
     log('view products');
     final provider = Provider.of<FoodProvider>(context, listen: false);
-    // final totalprovider = Provider.of<FoodProvider>(context);
+    
     provider.getallproductsprovider();
     return Scaffold(
       appBar: AppBar(
